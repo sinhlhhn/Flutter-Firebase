@@ -1,5 +1,11 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:simple_app/Screen/Home.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:simple_app/Utils/debouncer.dart';
+
+import 'Screen/login_button.dart';
 
 void main() {
   showLayoutGuidelines();
@@ -13,13 +19,22 @@ void showLayoutGuidelines() {
   // debugPaintSizeEnabled = true;
 }
 
-class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
+class MyApp extends StatefulWidget {
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
 
+class _MyAppState extends State<MyApp> {
+  // This widget is the root of your application.
   FocusNode nodeOne = FocusNode();
+
   FocusNode nodeTwo = FocusNode();
-  bool _isLogin = false;
+
+  bool _isLogin = true;
+  LoadingState _loginState = LoadingState.finished;
+
   String _userName = "";
+
   String _password = "";
 
   @override
@@ -28,24 +43,29 @@ class MyApp extends StatelessWidget {
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
         // resizeToAvoidBottomInset: false,
-        body: SafeArea(
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              SizedBox(
-                width: double.infinity,
-                height: 100,
-                child: _header,
-              ),
-              Expanded(
-                child: Center(
-                  child: SingleChildScrollView(
-                    child: _createContent(context),
+        body: Stack(
+          children: [
+            SafeArea(
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  SizedBox(
+                    width: double.infinity,
+                    height: 100,
+                    child: _header,
                   ),
-                ),
+                  Expanded(
+                    child: Center(
+                      child: SingleChildScrollView(
+                        child: _createContent(context),
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
+            _createIndicator(context),
+          ],
         ),
         backgroundColor: Colors.white,
       ),
@@ -65,28 +85,72 @@ class MyApp extends StatelessWidget {
     ),
   );
 
-  Column _createContent(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.end,
-      children: [
-        Padding(
-          padding: const EdgeInsets.fromLTRB(48, 0, 48, 16),
-          child: _createTextField(TextFieldType.userName, context),
-        ),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(48, 0, 48, 0),
-          child: _createTextField(TextFieldType.password, context),
-        ),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(0, 0, 48, 0),
-          child: _createForgetPasswordButton(),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(left: 48, right: 48),
-          child: _createLoginButton(context),
-        ),
-      ],
+  Widget _createIndicator(BuildContext context) {
+    switch (_loginState) {
+      case LoadingState.loading:
+        return Center(
+          child: Container(
+            width: double.infinity,
+            height: double.infinity,
+            color: Colors.transparent,
+            child: CupertinoActivityIndicator(radius: 20),
+          ),
+        );
+      default:
+        return const SizedBox();
+    }
+  }
+
+  Widget _createContent(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 48),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          _createTextField(TextFieldType.userName, context),
+          const SizedBox(height: 16),
+          _createTextField(TextFieldType.password, context),
+          const SizedBox(height: 8),
+          _createForgetPasswordButton(),
+          const SizedBox(height: 8),
+          LoginButton(
+              onPress: () {
+                print("Tap");
+                onPress(context);
+              },
+              isLogin: _isLogin),
+          const SizedBox(height: 8),
+          Row(
+            children: [
+              GestureDetector(
+                child: RichText(
+                  text: TextSpan(
+                    text: _isLogin
+                        ? "Don't have account, "
+                        : "Already have account, ",
+                    style: const TextStyle(fontSize: 14, color: Colors.black),
+                    children: [
+                      TextSpan(
+                        text: _isLogin ? 'Register' : 'Login',
+                        style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
+                            color: Colors.green),
+                      ),
+                    ],
+                  ),
+                ),
+                onTap: () {
+                  setState(() {
+                    _isLogin = !_isLogin;
+                  });
+                },
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 
@@ -110,16 +174,9 @@ class MyApp extends StatelessWidget {
       style: const TextStyle(color: Colors.blue),
       onSubmitted: (value) {
         if (type == TextFieldType.userName) {
-          if (value.isNotEmpty) {
-            _isLogin = true;
-          } else {
-            _isLogin = false;
-          }
           FocusScope.of(context).requestFocus(nodeTwo);
         }
-        if (type == TextFieldType.password && _isLogin && value.isNotEmpty) {
-          onPress(context);
-        }
+        onPress(context);
       },
       obscureText: type == TextFieldType.password ? true : false,
       onChanged: (value) {
@@ -132,147 +189,55 @@ class MyApp extends StatelessWidget {
     );
   }
 
-  ElevatedButton _createLoginButton(BuildContext context) {
-    return ElevatedButton(
-      style: ElevatedButton.styleFrom(
-        // button radius
-        shape: RoundedRectangleBorder(
-          side: const BorderSide(
-            color: Colors.green,
-            width: 1,
-            style: BorderStyle.solid,
-          ),
-          borderRadius: BorderRadius.circular(50),
+  GestureDetector _createForgetPasswordButton() {
+    return GestureDetector(
+      child: Text(
+        _isLogin ? "Forgot password" : " ",
+        style: const TextStyle(
+          fontSize: 12,
+          color: Colors.black,
         ),
-        elevation: 5,
-        shadowColor: Colors.red,
-        primary: Colors.green, // background color
-        onPrimary: Colors.white, // text color
-        // thêm minimumSize để kích hoạt padding bên ngoài
-        minimumSize: const Size.fromHeight(48),
       ),
-      child: const Text('Login'),
-      onPressed: () {
-        onPress(context);
-      },
+      onTap: () {},
     );
   }
 
-  TextButton _createForgetPasswordButton() {
-    return TextButton(
-      style: TextButton.styleFrom(
-        textStyle: const TextStyle(fontSize: 14),
-      ),
-      onPressed: () {},
-      child: const Text(
-        'Forgot password',
-        style: TextStyle(color: Colors.black),
-      ),
-    );
-  }
-
-  Container _shadowButton(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(left: 30, top: 100, right: 30, bottom: 50),
-      height: 100,
-      width: 100,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(10),
-            topRight: Radius.circular(10),
-            bottomLeft: Radius.circular(10),
-            bottomRight: Radius.circular(10)),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.5),
-            spreadRadius: 5,
-            blurRadius: 7,
-            offset: const Offset(0, 10), // changes position of shadow
-          ),
-        ],
-      ),
-      child: TextButton(
-        child: const Text('some'),
-        onPressed: () => onPress(context),
-      ),
-    );
-  }
-
-// CupertinoAlertDialog(
-//           title: const Text('Warning'),
-//           content: const Text('user name or password is empty'),
-//           actions: [
-//             CupertinoDialogAction(
-//               onPressed: () {
-//                 Navigator.pop(context);
-//               },
-//               child: const Text('OK'),
-//             ),
-//           ],
-//         ),
-
-  void onPress(BuildContext context) {
+  void onPress(BuildContext context) async {
     if (_userName.isEmpty && _password.isEmpty) {
-      showDialog(
-          context: context,
-          builder: (BuildContext context) => AlertDialog(
-                title: const Text('Warning'),
-                actions: <Widget>[
-                  TextButton(
-                    child: const Text('Approve'),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                ],
-              ));
+      Utils.showError(context, 'Warning', 'user name or password is empty');
       return;
     }
-    Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
+    setState(() {
+      _loginState = LoadingState.loading;
+    });
+    try {
+      if (!_isLogin) {
+        await FirebaseAuth.instance.createUserWithEmailAndPassword(
+            email: _userName, password: _password);
+      }
+      await FirebaseAuth.instance
+          .signInWithEmailAndPassword(email: _userName, password: _password);
+    } on PlatformException catch (e) {
+      Utils.showError(context, e.code, e.message.toString());
+      setState(() {
+        _loginState = LoadingState.finished;
+      });
+      return;
+    } catch (e) {
+      Utils.showError(context, "Error", e.toString());
+      setState(() {
+        _loginState = LoadingState.finished;
+      });
+      return;
+    }
+    Navigator.pushReplacement(context, MaterialPageRoute(
       builder: (context) {
         // do something
         return const HomeScreen();
       },
-    ), (route) => false);
+    ), result: (route) => false);
   }
 }
 
 enum TextFieldType { userName, password }
-
-class LoginButton extends StatefulWidget {
-  final VoidCallback onPress;
-
-  const LoginButton({Key? key, required this.onPress}) : super(key: key);
-  @override
-  State<StatefulWidget> createState() {
-    return _LoginButtonState();
-  }
-}
-
-class _LoginButtonState extends State<LoginButton> {
-  @override
-  Widget build(BuildContext context) {
-    return ElevatedButton(
-      style: ElevatedButton.styleFrom(
-        // button radius
-        shape: RoundedRectangleBorder(
-          side: const BorderSide(
-            color: Colors.green,
-            width: 1,
-            style: BorderStyle.solid,
-          ),
-          borderRadius: BorderRadius.circular(50),
-        ),
-        elevation: 5,
-        shadowColor: Colors.red,
-        primary: Colors.green, // background color
-        onPrimary: Colors.white, // text color
-        // thêm minimumSize để kích hoạt padding bên ngoài
-        minimumSize: const Size.fromHeight(48),
-      ),
-      child: const Text('Login'),
-      onPressed: () => widget.onPress,
-    );
-  }
-}
+enum LoadingState { loading, finished }

@@ -1,10 +1,10 @@
 // ignore_for_file: file_names
 
 import 'package:flutter/material.dart';
-import 'package:simple_app/Screen/home_tab.dart';
-import 'package:simple_app/Screen/category_tab.dart';
-import 'package:simple_app/Screen/market_tab.dart';
-import 'package:simple_app/Screen/tab4.dart';
+import 'package:simple_app/Screen/test_screen/home_tab.dart';
+import 'package:simple_app/Screen/test_screen/category_tab.dart';
+import 'package:simple_app/Screen/test_screen/market_tab.dart';
+import 'package:simple_app/Screen/test_screen/tab4.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -50,7 +50,6 @@ class HomeScreen extends StatelessWidget {
             ),
             CategoryTab(),
             MarketTab(),
-            TestTab(),
           ],
         ),
       ),
