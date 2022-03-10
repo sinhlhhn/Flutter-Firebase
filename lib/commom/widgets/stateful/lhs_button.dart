@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 
-class LoginButton extends StatefulWidget {
+class LHSButton extends StatefulWidget {
   final VoidCallback onPress;
   final bool isLogin;
 
-  const LoginButton({Key? key, required this.onPress, required this.isLogin})
+  const LHSButton({Key? key, required this.onPress, required this.isLogin})
       : super(key: key);
   @override
   State<StatefulWidget> createState() {
-    return _LoginButtonState();
+    return _LHSButtonState();
   }
 }
 
-class _LoginButtonState extends State<LoginButton> {
+class _LHSButtonState extends State<LHSButton> {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
