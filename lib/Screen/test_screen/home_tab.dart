@@ -156,9 +156,12 @@ class FavouriteWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        _rowContent(CoinModel('BitCoin', '\$10000', 'images/bitcoin.png')),
-        _rowContent(CoinModel('DogeCoin', '\$1000', 'images/dogecoin.png')),
-        _rowContent(CoinModel('Ethereum', '\$100', 'images/etherium.jpg')),
+        _rowContent(
+            CoinModel('BitCoin', '\$10000', 'assets/images/bitcoin.png')),
+        _rowContent(
+            CoinModel('DogeCoin', '\$1000', 'assets/images/dogecoin.png')),
+        _rowContent(
+            CoinModel('Ethereum', '\$100', 'assets/images/etherium.jpg')),
       ],
     );
   }
