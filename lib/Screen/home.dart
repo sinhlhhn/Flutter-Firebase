@@ -23,7 +23,7 @@ class HomeScreen extends StatelessWidget {
 
   DefaultTabController _tabController() {
     return DefaultTabController(
-      length: 4,
+      length: 5,
       child: Scaffold(
         bottomNavigationBar: const TabBar(
           labelColor: Colors.red,
@@ -40,6 +40,9 @@ class HomeScreen extends StatelessWidget {
             Tab(
               text: 'Tab 4',
             ),
+            Tab(
+              text: 'Tab 5',
+            ),
           ],
         ),
         body: TabBarView(
@@ -50,6 +53,8 @@ class HomeScreen extends StatelessWidget {
             ),
             CategoryTab(),
             MarketTab(),
+            TestGridView(),
+            HomePageView(),
           ],
         ),
       ),
