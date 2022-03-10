@@ -38,6 +38,9 @@ dependencies:
 
   sqflite: ^2.0.0+3
 
+  flutter_bloc: ^8.0.1
+  equatable: ^2.0.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
