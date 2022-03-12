@@ -51,7 +51,7 @@ class HomeScreen extends StatelessWidget {
             Center(
               child: FirstTab(),
             ),
-            CategoryTab(),
+            const CategoryTab(),
             MarketTab(),
             TestGridView(),
             HomePageView(),
@@ -64,6 +64,8 @@ class HomeScreen extends StatelessWidget {
 
 //--------------------------State-------------------------
 class AnimationButton extends StatefulWidget {
+  const AnimationButton({Key? key}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() => _AnimationButtonState();
 }
