@@ -2,10 +2,8 @@ import 'dart:async';
 
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/services.dart';
 
-enum AuthenticationStatus { unknown, autheticated, unauthenticated }
+enum AuthenticationStatus { unknown, authenticated, unauthenticated }
 
 class AuthenticationRepository {
   final _controller = StreamController<AuthenticationStatus>();
@@ -20,13 +18,9 @@ class AuthenticationRepository {
     try {
       await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: userName, password: password);
-      _controller.add(AuthenticationStatus.autheticated);
-    } on PlatformException catch (e) {
-      _controller.addError(e);
-      return;
-    } catch (e) {
-      _controller.addError(e);
-      return;
+      _controller.add(AuthenticationStatus.authenticated);
+    } catch (_) {
+      rethrow;
     }
   }
 
@@ -34,13 +28,9 @@ class AuthenticationRepository {
     try {
       await FirebaseAuth.instance
           .createUserWithEmailAndPassword(email: userName, password: password);
-      _controller.add(AuthenticationStatus.autheticated);
-    } on PlatformException catch (e) {
-      _controller.addError(e);
-      return;
-    } catch (e) {
-      _controller.addError(e);
-      return;
+      _controller.add(AuthenticationStatus.authenticated);
+    } catch (_) {
+      rethrow;
     }
   }
 
@@ -48,9 +38,8 @@ class AuthenticationRepository {
     try {
       await FirebaseAuth.instance.signOut();
       _controller.add(AuthenticationStatus.unauthenticated);
-    } catch (e) {
-      _controller.addError(e);
-      return;
+    } catch (_) {
+      rethrow;
     }
   }
 
