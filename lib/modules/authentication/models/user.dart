@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-class User {
+class User extends Equatable {
   const User(this.id);
   final String id;
 
