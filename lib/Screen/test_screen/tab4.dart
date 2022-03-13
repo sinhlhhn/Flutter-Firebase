@@ -264,7 +264,10 @@ class HomePage1 extends StatelessWidget {
                 final userId = context.select(
                   (AuthenticationBloc bloc) => bloc.state.user.id,
                 );
-                return Text('UserID: $userId');
+                final bloc = context.read<AuthenticationBloc>();
+                final user = bloc.state.user;
+                final email = user.email;
+                return Text('$userId - $email');
               },
             ),
             ElevatedButton(
