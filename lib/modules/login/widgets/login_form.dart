@@ -6,6 +6,7 @@ import 'package:simple_app/commom/widgets/stateless/lhs_indicator.dart';
 import 'package:simple_app/commom/widgets/stateless/lhs_text_form_field.dart';
 import 'package:simple_app/modules/login/bloc/form_submission_status.dart';
 import 'package:simple_app/modules/login/bloc/login_bloc.dart';
+import 'package:simple_app/modules/reset_password/widgets/reset_password_page.dart';
 import 'package:simple_app/utils/debouncer.dart';
 
 class LoginForm extends StatefulWidget {
@@ -162,11 +163,12 @@ class _LoginPageState extends State<LoginForm> {
   }
 
   LHSButton _loginButton(bool isLogin) {
+    final text = isLogin ? const Text('Login') : const Text('Register');
     return LHSButton(
       onPress: () {
         onPress(isLogin);
       },
-      isLogin: isLogin,
+      text: text,
     );
   }
 
@@ -206,7 +208,7 @@ class _LoginPageState extends State<LoginForm> {
         ),
       ),
       onTap: () {
-        context.read<LoginBloc>().add(const ForgotPassword());
+        Navigator.push(context, ForgotPasswordPage.route());
       },
     );
   }
