@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 
 class LHSButton extends StatefulWidget {
   final VoidCallback onPress;
-  final bool isLogin;
+  final Widget text;
 
-  const LHSButton({Key? key, required this.onPress, required this.isLogin})
+  const LHSButton({Key? key, required this.onPress, required this.text})
       : super(key: key);
   @override
   State<StatefulWidget> createState() {
@@ -33,7 +33,7 @@ class _LHSButtonState extends State<LHSButton> {
         // thêm minimumSize để kích hoạt padding bên ngoài
         minimumSize: const Size.fromHeight(48),
       ),
-      child: widget.isLogin ? const Text('Login') : const Text('Register'),
+      child: widget.text,
       onPressed: () => {widget.onPress()},
     );
   }
