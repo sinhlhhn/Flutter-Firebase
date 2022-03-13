@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:simple_app/modules/authentication/models/user.dart';
 
 class UserRepository {
@@ -6,9 +7,10 @@ class UserRepository {
   Future<User?> getUser() async {
     if (_user != null) return _user;
 
-    return Future.delayed(
-      const Duration(milliseconds: 300),
-      () => _user = const User("FIRST USER"),
-    );
+    final user = await FirebaseAuth.instance.currentUser();
+    final id = user.uid;
+    final email = user.email;
+
+    return User(id, email);
   }
 }
