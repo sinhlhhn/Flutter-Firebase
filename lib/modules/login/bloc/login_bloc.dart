@@ -17,7 +17,6 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     on<LoginPasswordChanged>(_onPasswordChanged);
     on<LoginSubmitted>(_onLoginSubmitted);
     on<RegisterSubmitted>(_onRegisterSubmitted);
-    on<ForgotPassword>(_onForgotPassword);
     on<TypeChanged>(_onTypeChanged);
   }
 
@@ -80,10 +79,6 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     emit(state.copyWith(
         formSubmissionStatus: const SubmissionFailed(
             error: "User name or password is too short")));
-  }
-
-  void _onForgotPassword(ForgotPassword event, Emitter<LoginState> emit) async {
-    print("FORGOT PASSWORD");
   }
 
   void _onTypeChanged(TypeChanged event, Emitter<LoginState> emit) async {

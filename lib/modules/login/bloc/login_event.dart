@@ -35,7 +35,3 @@ class RegisterSubmitted extends LoginEvent {
 class TypeChanged extends LoginEvent {
   const TypeChanged();
 }
-
-class ForgotPassword extends LoginEvent {
-  const ForgotPassword();
-}
