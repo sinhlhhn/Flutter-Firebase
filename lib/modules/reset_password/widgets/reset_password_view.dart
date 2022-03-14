@@ -36,7 +36,6 @@ class ResetPasswordView extends StatelessWidget {
                     ),
                     LHSButton(
                       onPress: () {
-                        print(_emailController.text);
                         context
                             .read<ResetPasswordBloc>()
                             .add(SendTapped(_emailController.text));

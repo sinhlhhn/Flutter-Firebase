@@ -16,7 +16,9 @@ class ForgotPasswordPage extends StatelessWidget {
     return BlocProvider(
       create: (context) =>
           ResetPasswordBloc(resetPasswordRepository: ResetPasswordRepository()),
-      child: Scaffold(body: ResetPasswordView()),
+      child: Scaffold(
+        body: ResetPasswordView(),
+      ),
     );
   }
 }
