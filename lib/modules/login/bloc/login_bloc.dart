@@ -43,6 +43,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         password.length > 5) {
       try {
         await _authenticationRepository.login(userName, password);
+        emit(state.copyWith(formSubmissionStatus: const SubmissionSuccess()));
       } catch (e) {
         final error = AuthenticationException.generateExceptionMessage(e);
         emit(state.copyWith(
@@ -68,6 +69,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         password.length > 5) {
       try {
         await _authenticationRepository.register(userName, password);
+        emit(state.copyWith(formSubmissionStatus: const SubmissionSuccess()));
       } catch (e) {
         final error = AuthenticationException.generateExceptionMessage(e);
         emit(state.copyWith(

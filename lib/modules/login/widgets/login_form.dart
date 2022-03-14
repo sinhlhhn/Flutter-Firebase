@@ -30,7 +30,8 @@ class _LoginPageState extends State<LoginForm> {
   Widget build(BuildContext context) {
     return BlocConsumer<LoginBloc, LoginState>(
       buildWhen: (previous, current) {
-        return previous.isLogin != current.isLogin;
+        return previous.isLogin != current.isLogin ||
+            previous.formSubmissionStatus != current.formSubmissionStatus;
       },
       listenWhen: (previous, current) {
         return previous.formSubmissionStatus != current.formSubmissionStatus;

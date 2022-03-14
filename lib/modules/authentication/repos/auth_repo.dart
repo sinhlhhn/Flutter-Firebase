@@ -7,11 +7,10 @@ enum AuthenticationStatus { unknown, authenticated, unauthenticated }
 
 class AuthenticationRepository {
   final _controller = StreamController<AuthenticationStatus>();
-  final _instance = FirebaseAuth.instance;
 
   Stream<AuthenticationStatus> get status async* {
     await Future<void>.delayed(const Duration(seconds: 1));
-    yield AuthenticationStatus.unknown;
+    yield AuthenticationStatus.unauthenticated;
     yield* _controller.stream;
   }
 
@@ -27,8 +26,8 @@ class AuthenticationRepository {
 
   Future<void> register(String userName, String password) async {
     try {
-      await _instance.createUserWithEmailAndPassword(
-          email: userName, password: password);
+      await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(email: userName, password: password);
       _controller.add(AuthenticationStatus.authenticated);
     } catch (_) {
       rethrow;
@@ -37,7 +36,7 @@ class AuthenticationRepository {
 
   Future<void> logout() async {
     try {
-      await _instance.signOut();
+      await FirebaseAuth.instance.signOut();
       _controller.add(AuthenticationStatus.unauthenticated);
     } catch (_) {
       rethrow;
