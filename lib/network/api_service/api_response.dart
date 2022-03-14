@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 
 enum APIResponseStatus { loading, completed, error }
 
+/// Xác định `state` của `request`
 abstract class APIResponse<T> extends Equatable {
   final APIResponseStatus? status;
   final T? data;

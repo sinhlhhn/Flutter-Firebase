@@ -1,8 +1,9 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'app_exception.dart';
+import '../app_exception.dart';
 
-class APIService {
+/// Thực hiện các `request` lên `server` và xử lý `response` từ server
+class MovieApiService {
   final String _baseUrl = "http://api.themoviedb.org/3/";
 
   Future<dynamic> get(String url) async {

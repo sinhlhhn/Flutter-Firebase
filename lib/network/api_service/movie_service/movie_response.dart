@@ -1,5 +1,6 @@
-import 'package:simple_app/network/api_service/model/movie_model.dart';
+import 'package:simple_app/modules/movie/models/movie_model.dart';
 
+/// Chuyển thành `model` khi `request success` và nhận được `data` từ server
 class MovieResponse {
   final int totalResults;
   final List<Movie> results;

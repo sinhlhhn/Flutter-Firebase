@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:simple_app/modules/movie/repos/movie_repository.dart';
-import 'package:simple_app/model/movie_model.dart';
+import 'package:simple_app/modules/movie/models/movie_model.dart';
 import 'package:simple_app/network/api_service/api_response.dart';
 
 part 'movie_event.dart';

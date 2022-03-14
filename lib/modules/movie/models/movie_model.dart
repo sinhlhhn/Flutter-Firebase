@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 
+// Dữ liệu cuối cùng được sử dụng để hiển thị lên UI
 class Movie extends Equatable {
   final int? id;
   final num? voteAverage;
