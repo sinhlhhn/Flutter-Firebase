@@ -1,5 +1,6 @@
+import 'dart:io';
 import 'dart:math';
-
+import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:simple_app/modules/authentication/bloc/bloc/authentication_bloc.dart';
@@ -242,45 +243,6 @@ class HomePageView extends StatelessWidget {
           child: Container(color: Colors.green),
         ),
       ],
-    );
-  }
-}
-
-class HomePage1 extends StatelessWidget {
-  static Route route() {
-    return MaterialPageRoute<void>(builder: (_) => HomePage1());
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Home')),
-      body: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Builder(
-              builder: (context) {
-                final userId = context.select(
-                  (AuthenticationBloc bloc) => bloc.state.user.id,
-                );
-                final bloc = context.read<AuthenticationBloc>();
-                final user = bloc.state.user;
-                final email = user.email;
-                return Text('$userId - $email');
-              },
-            ),
-            ElevatedButton(
-              child: const Text('Logout'),
-              onPressed: () {
-                context
-                    .read<AuthenticationBloc>()
-                    .add(AuthenticationLogoutRequested());
-              },
-            ),
-          ],
-        ),
-      ),
     );
   }
 }
