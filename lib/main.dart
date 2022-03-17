@@ -29,60 +29,6 @@ void showLayoutGuidelines() {
   // debugPaintSizeEnabled = true;
 }
 
-class MovieApp extends StatelessWidget {
-  const MovieApp({
-    Key? key,
-    required this.authenticationRepository,
-  }) : super(key: key);
-
-  final MovieRepository authenticationRepository;
-
-  @override
-  Widget build(BuildContext context) {
-    return RepositoryProvider.value(
-      value: authenticationRepository,
-      child: BlocProvider(
-        create: (context) => MovieBloc(
-          movieRepository: authenticationRepository,
-        ),
-        child: MaterialApp(
-          builder: (context, child) {
-            return Scaffold(
-              body: BlocBuilder<MovieBloc, MovieState>(
-                builder: (context, state) {
-                  print(state);
-                  final error = state.message;
-                  return Stack(children: [
-                    Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text('$error'),
-                          ElevatedButton(
-                            onPressed: () {
-                              context
-                                  .read<MovieBloc>()
-                                  .add(const FetchDataEvent());
-                            },
-                            child: const Text('Fetch'),
-                          )
-                        ],
-                      ),
-                    ),
-                    state.status == APIResponseStatus.loading
-                        ? const LHSIndicator()
-                        : const SizedBox(),
-                  ]);
-                },
-              ),
-            );
-          },
-        ),
-      ),
-    );
-  }
-}
-
 class App extends StatelessWidget {
   const App({
     Key? key,
