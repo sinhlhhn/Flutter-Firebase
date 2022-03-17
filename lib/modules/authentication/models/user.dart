@@ -1,13 +1,13 @@
 import 'package:equatable/equatable.dart';
 
-class User extends Equatable {
+class UserModel extends Equatable {
   final String id;
-  final String email;
+  final String? email;
 
-  const User(this.id, this.email);
+  const UserModel(this.id, this.email);
 
   @override
   List<Object> get props => [id];
 
-  static const empty = User("-", "-");
+  static const empty = UserModel("-", "-");
 }
