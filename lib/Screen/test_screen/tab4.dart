@@ -104,12 +104,12 @@ class TestGridView extends StatelessWidget {
   }
 }
 
-class HomePage extends StatefulWidget {
+class HomePage99 extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage99> {
   int _count = 0; // used by StreamBuilder
 
   @override
