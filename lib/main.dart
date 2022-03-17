@@ -1,14 +1,22 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:simple_app/Screen/test_screen/tab4.dart';
+import 'package:simple_app/commom/Theme/theme.dart';
+import 'package:simple_app/commom/widgets/stateless/lhs_indicator.dart';
 import 'package:simple_app/modules/authentication/bloc/bloc/authentication_bloc.dart';
 import 'package:simple_app/modules/authentication/repos/auth_repo.dart';
 import 'package:simple_app/modules/authentication/repos/user_repo.dart';
 import 'package:simple_app/modules/login/widgets/login_page.dart';
+import 'package:simple_app/modules/movie/bloc/movie_bloc.dart';
+import 'package:simple_app/modules/movie/repos/movie_repository.dart';
+import 'package:simple_app/modules/profile/widgets/profile_page.dart';
+import 'package:simple_app/network/api_service/api_response.dart';
 import 'package:simple_app/splash/splash.dart';
 
-void main() {
+void main() async {
   showLayoutGuidelines();
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(
     App(
       authenticationRepository: AuthenticationRepository(),
