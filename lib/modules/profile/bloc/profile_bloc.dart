@@ -36,10 +36,15 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
 
   void _onGetCurrentAvatar(
       GetCurrentAvatar event, Emitter<ProfileState> emit) async {
-    final currentUser = _getCurrentUser();
-    final email = currentUser.email ?? "";
-    final imageUrl = await _getImageUrl(email);
-    emit(ProfileState.withImageUrl(imageUrl));
+    try {
+      final currentUser = _getCurrentUser();
+      final email = currentUser.email ?? "";
+      final imageUrl = await _getImageUrl(email);
+      emit(ProfileState.withImageUrl(imageUrl));
+    } catch (_) {
+      // trường hợp lần đầu user đăng kí nên chưa có avatar nên không cần xử lý lỗi ở đây
+      return;
+    }
   }
 
   Future<XFile?> _getImage(ImageSource source) async {
