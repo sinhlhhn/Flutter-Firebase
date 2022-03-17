@@ -14,3 +14,10 @@ class ChangeAvatar extends ProfileEvent {
   @override
   List<Object> get props => [source];
 }
+
+class GetCurrentAvatar extends ProfileEvent {
+  const GetCurrentAvatar();
+
+  @override
+  List<Object> get props => [];
+}
