@@ -102,8 +102,9 @@ class ProfileView extends StatelessWidget {
     final bloc = context.read<AuthenticationBloc>();
     final user = bloc.state.user;
     final email = user.email;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return ListTile(
-      tileColor: Colors.grey,
+      tileColor: isDark ? null : Colors.white,
       title: Text(email ?? ""),
       leading: const Icon(Icons.email),
     );
