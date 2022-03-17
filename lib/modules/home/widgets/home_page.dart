@@ -11,25 +11,35 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return DefaultTabController(
       length: 2,
       child: Scaffold(
-        bottomNavigationBar: const TabBar(
-          labelColor: Colors.red,
-          tabs: [
-            Tab(
-              text: 'Tab 1',
+        bottomNavigationBar: DecoratedBox(
+          decoration: BoxDecoration(color: theme.primaryColor),
+          child: Padding(
+            padding: const EdgeInsets.only(bottom: 16),
+            child: TabBar(
+              indicatorColor: Colors.transparent,
+              unselectedLabelColor: theme.backgroundColor,
+              tabs: const [
+                Tab(
+                  icon: Icon(Icons.movie),
+                  text: "Movie",
+                ),
+                Tab(
+                  icon: Icon(Icons.person),
+                  text: 'Profile',
+                ),
+              ],
             ),
-            Tab(
-              text: 'Tab 2',
-            ),
-          ],
+          ),
         ),
-        body: TabBarView(
-          physics: const NeverScrollableScrollPhysics(),
+        body: const TabBarView(
+          physics: NeverScrollableScrollPhysics(),
           children: [
             MoviePage(),
-            const ProfilePage(),
+            ProfilePage(),
           ],
         ),
       ),
