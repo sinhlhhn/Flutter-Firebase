@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:simple_app/Screen/test_screen/tab4.dart';
 import 'package:simple_app/modules/movie/widgets/movie_page.dart';
 import 'package:simple_app/modules/profile/widgets/profile_page.dart';
 
@@ -38,6 +39,7 @@ class HomePage extends StatelessWidget {
         body: const TabBarView(
           physics: NeverScrollableScrollPhysics(),
           children: [
+            // TestTab(),
             MoviePage(),
             ProfilePage(),
           ],
