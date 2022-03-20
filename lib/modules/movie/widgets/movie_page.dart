@@ -34,11 +34,8 @@ class _MoviePageState extends State<MoviePage>
         create: (context) => MovieBloc(
           movieRepository: movieRepository,
         ),
-        child: Scaffold(
-          appBar: AppBar(
-            title: const Text("Movie"),
-          ),
-          body: const MovieView(),
+        child: const Scaffold(
+          body: MovieView(),
         ),
       ),
     );
