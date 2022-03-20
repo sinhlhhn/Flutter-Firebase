@@ -47,6 +47,8 @@ dependencies:
   image_picker: ^0.8.4+11
   path_provider: ^2.0.9
   cached_network_image: ^3.2.0
+
+  scroll_snap_list: ^0.8.4
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -97,6 +99,9 @@ flutter:
   #       - asset: fonts/TrajanPro.ttf
   #       - asset: fonts/TrajanPro_Bold.ttf
   #         weight: 700
-  #
+  fonts:
+    - family: Yesteryear-Regular
+      fonts:
+        - asset: assets/fonts/movie_title/Yesteryear-Regular.ttf
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
