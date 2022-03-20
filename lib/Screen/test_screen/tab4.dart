@@ -3,35 +3,112 @@ import 'dart:math';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:scroll_snap_list/scroll_snap_list.dart';
 import 'package:simple_app/modules/authentication/bloc/bloc/authentication_bloc.dart';
 
-class TestTab extends StatelessWidget {
+class TestTab extends StatefulWidget {
+  @override
+  TestTabState createState() => TestTabState();
+}
+
+class TestTabState extends State<TestTab> {
+  List<int> data = [];
+  int _focusedIndex = -1;
+
+  @override
+  void initState() {
+    super.initState();
+
+    for (int i = 0; i < 10; i++) {
+      data.add(Random().nextInt(100) + 1);
+    }
+  }
+
+  void _onItemFocus(int index) {
+    // print(index);
+    setState(() {
+      _focusedIndex = index;
+    });
+  }
+
+  Widget _buildItemDetail() {
+    if (_focusedIndex < 0)
+      return Container(
+        height: 250,
+        child: Text("Nothing selected"),
+      );
+
+    if (data.length > _focusedIndex)
+      return Container(
+        height: 250,
+        child: Text("index $_focusedIndex: ${data[_focusedIndex]}"),
+      );
+
+    return Container(
+      height: 250,
+      child: Text("No Data"),
+    );
+  }
+
+  Widget _buildListItem(BuildContext context, int index) {
+    if (index == data.length)
+      return Center(
+        child: CircularProgressIndicator(),
+      );
+
+    //horizontal
+    return Container(
+      width: 150,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Container(
+            height: 200,
+            width: 150,
+            color: Colors.lightBlueAccent,
+            child: Text("i:$index\n${data[index]}"),
+          )
+        ],
+      ),
+    );
+  }
+
+  ///Override default dynamicItemSize calculation
+  double customEquation(double distance) {
+    print(distance);
+    return 1 - min(distance.abs() / 500, 0.3);
+    print(distance);
+    final equal = 1 - (distance / 1000);
+    // print(equal);
+    return 0.5;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          width: 200.0,
-          height: 100.0,
-          color: Colors.green,
-          padding: EdgeInsets.all(35),
-          margin: EdgeInsets.all(20),
-          alignment: Alignment.bottomRight,
-          child: Text("Hello! I am in the container widget",
-              style: TextStyle(fontSize: 25)),
+    return MaterialApp(
+      title: 'Horizontal List Demo',
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text("Horizontal List"),
         ),
-        Container(
-          width: 200.0,
-          height: 100.0,
-          color: Colors.green,
-          padding: EdgeInsets.all(35),
-          margin: EdgeInsets.all(20),
-          alignment: Alignment.bottomRight,
-          transform: Matrix4.rotationZ(0.1),
-          child: Text("Hello! I am in the container widget",
-              style: TextStyle(fontSize: 25)),
-        )
-      ],
+        body: Container(
+          child: Column(
+            children: <Widget>[
+              Expanded(
+                child: ScrollSnapList(
+                  onItemFocus: _onItemFocus,
+                  itemSize: 150,
+                  itemBuilder: _buildListItem,
+                  itemCount: data.length,
+                  dynamicItemSize: true,
+                  dynamicSizeEquation: customEquation, //optional
+                ),
+              ),
+              _buildItemDetail(),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
