@@ -150,7 +150,7 @@ class _LoginPageState extends State<LoginForm> {
       focusNode: nodeTwo,
       prefix: const Icon(Icons.security),
       label: "Password",
-      obsecure: false,
+      obsecure: true,
       onEditingCompleted: () {
         onPress(isLogin);
       },
