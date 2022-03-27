@@ -3,22 +3,22 @@ import 'package:equatable/equatable.dart';
 // Dữ liệu cuối cùng được sử dụng để hiển thị lên UI
 
 class Movie extends Equatable {
-  int? voteCount;
-  int? id;
-  bool? video;
-  dynamic voteAverage;
-  String? title;
-  double? popularity;
-  String? posterPath;
-  String? originalLanguage;
-  String? originalTitle;
-  List<int>? genreIds;
-  String? backdropPath;
-  bool? adult;
-  String? overview;
-  String? releaseDate;
+  final int? voteCount;
+  final int? id;
+  final bool? video;
+  final dynamic voteAverage;
+  final String? title;
+  final double? popularity;
+  final String? posterPath;
+  final String? originalLanguage;
+  final String? originalTitle;
+  final List<int>? genreIds;
+  final String? backdropPath;
+  final bool? adult;
+  final String? overview;
+  final String? releaseDate;
 
-  Movie(
+  const Movie(
       {this.voteCount,
       this.id,
       this.video,

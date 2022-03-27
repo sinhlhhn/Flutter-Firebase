@@ -4,8 +4,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:scroll_snap_list/scroll_snap_list.dart';
 import 'package:simple_app/commom/constant/color.dart';
 import 'package:simple_app/commom/constant/font.dart';
+import 'package:simple_app/commom/widgets/stateless/lhs_rating_view.dart';
 import 'package:simple_app/modules/movie/bloc/movie_bloc.dart';
 import 'package:simple_app/modules/movie/models/movie_model.dart';
+import 'package:simple_app/modules/movie_detail/widgets/movie_detail_page.dart';
 import 'package:simple_app/utils/dart.dart';
 
 class MovieView extends StatefulWidget {
@@ -74,9 +76,9 @@ class _MovieViewState extends State<MovieView> {
         _movieTitle(movie),
         // _subTitle(),
         addVerticalSpace(_size.height * 0.005),
-        _rating(movie.voteAverage),
+        LHSRatingView(rating: movie.voteAverage),
         addVerticalSpace(_size.height * 0.01),
-        _buttonBuy(),
+        _buttonBuy(movie),
         addVerticalSpace(_size.height * 0.01),
         _listImageMovie(movie),
       ],
@@ -104,43 +106,40 @@ class _MovieViewState extends State<MovieView> {
   }
 
   Widget _listImageMovie(Movie movie) {
-    return ClipRect(
-      child: CachedNetworkImage(
-        imageUrl: movie.posterUrl,
-        width: _movieItemWidth,
-        height: _size.height * 0.3,
-      ),
-    );
-  }
-
-  Widget _buttonBuy() {
-    return Container(
-      width: _size.width * 0.25,
-      height: _size.height * 0.05,
-      decoration: BoxDecoration(
+    return GestureDetector(
+      onTap: () => _toDetailMovie(movie),
+      child: ClipRRect(
         borderRadius: BorderRadius.circular(10),
-        color: Colors.red,
-      ),
-      child: const Center(
-        child: Text(
-          "BUY TICKET",
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-          ),
+        child: CachedNetworkImage(
+          imageUrl: movie.posterUrl,
+          width: _movieItemWidth,
+          height: _size.height * 0.3,
+          fit: BoxFit.cover,
         ),
       ),
     );
   }
 
-  Widget _rating(dynamic rating) {
-    return Row(
-      children: List.generate(5, (index) {
-        return Icon(
-          Icons.star,
-          color: ((rating / 2).round() > index) ? Colors.yellow : Colors.grey,
-        );
-      }),
+  Widget _buttonBuy(Movie movie) {
+    return GestureDetector(
+      onTap: () => _toDetailMovie(movie),
+      child: Container(
+        width: _size.width * 0.25,
+        height: _size.height * 0.05,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          color: Colors.red,
+        ),
+        child: const Center(
+          child: Text(
+            "BUY TICKET",
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
+          ),
+        ),
+      ),
     );
   }
 
@@ -162,14 +161,18 @@ class _MovieViewState extends State<MovieView> {
           width: size.width,
           height: size.height,
           child: Stack(
-            alignment: Alignment.topCenter,
+            alignment: Alignment.center,
             children: [
               Positioned(
                   // left: -size.width / 3,
                   // right: -size.width / 3,
-                  child: CachedNetworkImage(
-                imageUrl: movies[index].backdropUrl,
-              )),
+                  top: size.height / 10,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: CachedNetworkImage(
+                      imageUrl: movies[index].backdropUrl,
+                    ),
+                  )),
               Container(
                 color: Colors.black.withOpacity(0.4),
               ),
@@ -193,5 +196,9 @@ class _MovieViewState extends State<MovieView> {
       itemCount: movies.length,
       scrollDirection: Axis.horizontal,
     );
+  }
+
+  void _toDetailMovie(Movie movie) {
+    Navigator.of(context).push(MoviewDetailPage.route(movie));
   }
 }
