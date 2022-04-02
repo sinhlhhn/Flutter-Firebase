@@ -1,3 +1,4 @@
+import 'package:top_snackbar_flutter/top_snack_bar.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -21,6 +22,12 @@ class MovieDetailView extends StatefulWidget {
 }
 
 class _MovieDetailViewState extends State<MovieDetailView> {
+  @override
+  void initState() {
+    context.read<MovieDetailBloc>().add(FetchFavouriteEvent(widget.movie.id!));
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -56,46 +63,61 @@ class _MovieDetailViewState extends State<MovieDetailView> {
   }
 
   Widget _favourite(Size size) {
-    return BlocListener<MovieDetailBloc, MovieDetailState>(
+    return BlocConsumer<MovieDetailBloc, MovieDetailState>(
       listener: (context, state) {
-        if (state is MovieDetailFavouriteStatus) {
-          if (state.isFavourite) {
-            ScaffoldMessenger.of(context)
-              ..hideCurrentSnackBar()
-              ..showSnackBar(
-                const SnackBar(content: Text("Film was add to favourite list")),
-              );
+        if (state is MovieDetailPopupFavouriteStatus) {
+          if (state.isShowPopup) {
+            showTopSnackBar(
+              context,
+              Container(
+                color: Colors.red,
+                child: const DefaultTextStyle(
+                  child: Text(
+                    "This film was added to the favourite list",
+                    textAlign: TextAlign.center,
+                  ),
+                  style: LHSTextStyle.contentStyle,
+                ),
+              ),
+            );
           }
         }
       },
-      child: SizedBox(
-        width: size.width / 2 - 32,
-        child: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            // button radius
-            shape: RoundedRectangleBorder(
-              side: const BorderSide(
-                color: Colors.green,
-                width: 1,
-                style: BorderStyle.solid,
+      builder: (context, state) {
+        bool isFavourite = false;
+        if (state is MovieDetailFavouriteStatus) {
+          isFavourite = state.isFavourite;
+        }
+        return SizedBox(
+          width: size.width / 2 - 32,
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              // button radius
+              shape: RoundedRectangleBorder(
+                side: const BorderSide(
+                  color: Colors.green,
+                  width: 1,
+                  style: BorderStyle.solid,
+                ),
+                borderRadius: BorderRadius.circular(50),
               ),
-              borderRadius: BorderRadius.circular(50),
+              elevation: 5,
+              shadowColor: Colors.red,
+              primary: Colors.green, // background color
+              onPrimary: Colors.white, // text color
+              // thêm minimumSize để kích hoạt padding bên ngoài
+              minimumSize: const Size.fromHeight(48),
             ),
-            elevation: 5,
-            shadowColor: Colors.red,
-            primary: Colors.green, // background color
-            onPrimary: Colors.white, // text color
-            // thêm minimumSize để kích hoạt padding bên ngoài
-            minimumSize: const Size.fromHeight(48),
+            child: isFavourite ? Text("Favourite") : Text("Not favourite"),
+            onPressed: () {
+              widget.movie.isFavourite = !isFavourite;
+              context
+                  .read<MovieDetailBloc>()
+                  .add(MovieDetailFavouriteChanged(widget.movie));
+            },
           ),
-          child: Text("Favourite"),
-          onPressed: () => {
-            context
-                .read<MovieDetailBloc>()
-                .add(const MovieDetailFavouriteChanged())
-          },
-        ),
-      ),
+        );
+      },
     );
   }
 
