@@ -7,8 +7,17 @@ abstract class MovieDetailEvent extends Equatable {
   List<Object> get props => [];
 }
 
+class FetchFavouriteEvent extends MovieDetailEvent {
+  final int movieId;
+
+  const FetchFavouriteEvent(this.movieId);
+  @override
+  List<Object> get props => [movieId];
+}
+
 class MovieDetailFavouriteChanged extends MovieDetailEvent {
-  const MovieDetailFavouriteChanged();
+  final Movie movie;
+  const MovieDetailFavouriteChanged(this.movie);
 
   @override
   List<Object> get props => [];
