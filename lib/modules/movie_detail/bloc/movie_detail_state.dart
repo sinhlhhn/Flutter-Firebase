@@ -21,10 +21,10 @@ class MovieDetailFavouriteStatus extends MovieDetailState {
 
 /// Trạng thái của `Popup`
 class MovieDetailPopupFavouriteStatus extends MovieDetailState {
-  final bool isShowPopup;
+  final bool isFavourite;
 
-  const MovieDetailPopupFavouriteStatus(this.isShowPopup);
+  const MovieDetailPopupFavouriteStatus(this.isFavourite);
 
   @override
-  List<Object> get props => [isShowPopup];
+  List<Object> get props => [isFavourite];
 }

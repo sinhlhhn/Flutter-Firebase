@@ -7,7 +7,7 @@ import 'package:simple_app/commom/widgets/stateless/lhs_text_form_field.dart';
 import 'package:simple_app/modules/login/bloc/form_submission_status.dart';
 import 'package:simple_app/modules/login/bloc/login_bloc.dart';
 import 'package:simple_app/modules/reset_password/widgets/reset_password_page.dart';
-import 'package:simple_app/utils/debouncer.dart';
+import 'package:simple_app/utils/utilities.dart';
 
 class LoginForm extends StatefulWidget {
   const LoginForm({Key? key}) : super(key: key);
