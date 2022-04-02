@@ -17,9 +17,9 @@ class Movie extends Equatable {
   final bool? adult;
   final String? overview;
   final String? releaseDate;
-  final bool? isFavourite;
+  bool? isFavourite;
 
-  const Movie(
+  Movie(
       {this.voteCount,
       this.id,
       this.video,
@@ -88,16 +88,13 @@ class Movie extends Equatable {
     return Movie(
         voteCount: json['vote_count'],
         id: json['id'],
-        video: json['video'] == 1,
         voteAverage: json['vote_average'],
         title: json['title'],
         popularity: json['popularity'],
         posterPath: json['poster_path'],
         originalLanguage: json['original_language'],
         originalTitle: json['original_title'],
-        genreIds: json['genre_ids'].cast<int>(),
         backdropPath: json['backdrop_path'],
-        adult: json['adult'] == 1,
         overview: json['overview'],
         releaseDate: json['release_date'],
         isFavourite: json['is_favourite'] == 1);

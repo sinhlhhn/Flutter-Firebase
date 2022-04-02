@@ -2,6 +2,9 @@ import 'package:simple_app/modules/movie/models/movie_model.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
+//dbPath:
+// /Users/lehoangsinh/Library/Developer/CoreSimulator/Devices/218CC963-C322-4DEC-82CB-D8E6CD7C6C54/data/Containers/Data/Application/51DD9FAB-31A0-4E65-8D96-1EE820C1065D/Documents/MovieDatabase.db
+
 class MovieDatabase {
   MovieDatabase._init();
   static final MovieDatabase _instance = MovieDatabase._init();
@@ -60,12 +63,10 @@ class MovieDatabase {
     print(value);
   }
 
-  Future<List<Movie>> readMovie(int movieId) async {
+  Future<List<Movie>> readAllMovie() async {
     final db = await _database();
     final value = await db.query(
       _movietableName,
-      where: "id = ?",
-      whereArgs: [movieId],
     );
 
     print(value);
@@ -74,7 +75,22 @@ class MovieDatabase {
     });
   }
 
-  Future deleteMovie(int movieId) async {
+  Future<Movie?> readMovieWith({required int movieId}) async {
+    final db = await _database();
+    final value = await db.query(
+      _movietableName,
+      where: "id = ?",
+      whereArgs: [movieId],
+    );
+
+    if (value.isEmpty) {
+      return null;
+    }
+    print(value);
+    return Movie.fromSqlJson(value.first);
+  }
+
+  Future deleteMovie({required int movieId}) async {
     final db = await _database();
     final value = await db.delete(
       _movietableName,
@@ -84,7 +100,7 @@ class MovieDatabase {
     print(value);
   }
 
-  Future updateMovie(Movie movie) async {
+  Future updateMovie({required Movie movie}) async {
     final db = await _database();
     final value = await db.update(
       _movietableName,
@@ -95,11 +111,13 @@ class MovieDatabase {
     print(value);
   }
 
-  Future updateFavouriteMovie(bool isFavourite) async {
+  Future updateFavouriteMovie(
+      {required int movieId, required bool isFavourite}) async {
     final db = await _database();
     try {
       final value = await db.rawUpdate(
-          "UPDATE $_movietableName SET is_favourite = ?", [isFavourite]);
+          "UPDATE $_movietableName SET is_favourite = ? WHERE id = ?",
+          [isFavourite ? 1 : 0, movieId]);
       print(value);
     } catch (e) {
       rethrow;
