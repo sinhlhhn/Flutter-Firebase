@@ -1,3 +1,5 @@
+import 'package:simple_app/commom/widgets/stateless/lhs_custom_snack_message.dart';
+import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -66,21 +68,15 @@ class _MovieDetailViewState extends State<MovieDetailView> {
     return BlocConsumer<MovieDetailBloc, MovieDetailState>(
       listener: (context, state) {
         if (state is MovieDetailPopupFavouriteStatus) {
-          if (state.isShowPopup) {
-            showTopSnackBar(
-              context,
-              Container(
-                color: Colors.red,
-                child: const DefaultTextStyle(
-                  child: Text(
-                    "This film was added to the favourite list",
-                    textAlign: TextAlign.center,
-                  ),
-                  style: LHSTextStyle.contentStyle,
-                ),
-              ),
-            );
-          }
+          final isFavourite = state.isFavourite;
+          showTopSnackBar(
+            context,
+            isFavourite
+                ? const CustomSnackBar.success(
+                    message: "This film was added to the favourite list")
+                : const CustomSnackBar.error(
+                    message: "This film was removed from the favourite list"),
+          );
         }
       },
       builder: (context, state) {
