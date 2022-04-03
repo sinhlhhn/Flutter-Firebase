@@ -22,7 +22,7 @@ class MovieDatabase {
   Future<Database> _database() async {
     final dbPath = await getDatabasesPath();
     final path = join(dbPath, _dbName);
-    print(path);
+    // print(path);
 
     return await openDatabase(
       path,
@@ -60,7 +60,7 @@ class MovieDatabase {
   Future insertMovie(Movie movie) async {
     final db = await _database();
     final value = await db.insert(_movietableName, movie.toSqlJson());
-    print(value);
+    // print(value);
   }
 
   Future<List<Movie>> readAllMovie() async {
@@ -69,7 +69,7 @@ class MovieDatabase {
       _movietableName,
     );
 
-    print(value);
+    // print(value);
     return List.generate(value.length, (index) {
       return Movie.fromSqlJson(value[index]);
     });
@@ -86,7 +86,7 @@ class MovieDatabase {
     if (value.isEmpty) {
       return null;
     }
-    print(value);
+    // print(value);
     return Movie.fromSqlJson(value.first);
   }
 
@@ -97,7 +97,7 @@ class MovieDatabase {
       where: "id = ?",
       whereArgs: [movieId],
     );
-    print(value);
+    // print(value);
   }
 
   Future updateMovie({required Movie movie}) async {
@@ -108,7 +108,7 @@ class MovieDatabase {
       where: "id = ?",
       whereArgs: [movie.id],
     );
-    print(value);
+    // print(value);
   }
 
   Future updateFavouriteMovie(
@@ -118,7 +118,7 @@ class MovieDatabase {
       final value = await db.rawUpdate(
           "UPDATE $_movietableName SET is_favourite = ? WHERE id = ?",
           [isFavourite ? 1 : 0, movieId]);
-      print(value);
+      // print(value);
     } catch (e) {
       rethrow;
     }
@@ -129,7 +129,7 @@ class MovieDatabase {
     final path = join(dbPath, _dbName);
 
     await deleteDatabase(path).whenComplete(() {
-      print('LOG: DELETE DB SUCCESS');
+      // print('LOG: DELETE DB SUCCESS');
     }).catchError((onError) {
       print(onError);
     });
