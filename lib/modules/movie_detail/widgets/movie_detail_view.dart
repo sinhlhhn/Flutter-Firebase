@@ -1,4 +1,3 @@
-import 'package:simple_app/commom/widgets/stateless/lhs_custom_snack_message.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -23,11 +22,17 @@ class MovieDetailView extends StatefulWidget {
   State<MovieDetailView> createState() => _MovieDetailViewState();
 }
 
-class _MovieDetailViewState extends State<MovieDetailView> {
+class _MovieDetailViewState extends State<MovieDetailView>
+    with TickerProviderStateMixin {
   @override
   void initState() {
     context.read<MovieDetailBloc>().add(FetchFavouriteEvent(widget.movie.id!));
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override
@@ -84,35 +89,50 @@ class _MovieDetailViewState extends State<MovieDetailView> {
         if (state is MovieDetailFavouriteStatus) {
           isFavourite = state.isFavourite;
         }
-        return SizedBox(
-          width: size.width / 2 - 32,
-          child: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              // button radius
-              shape: RoundedRectangleBorder(
-                side: const BorderSide(
-                  color: Colors.green,
-                  width: 1,
-                  style: BorderStyle.solid,
-                ),
-                borderRadius: BorderRadius.circular(50),
+        return AnimatedSwitcher(
+          duration: const Duration(milliseconds: 500),
+          transitionBuilder: (Widget child, Animation<double> animation) {
+            final animationSize = TweenSequence([
+              TweenSequenceItem(
+                tween: Tween<double>(begin: 1, end: 2),
+                weight: 50,
               ),
-              elevation: 5,
-              shadowColor: Colors.red,
-              primary: Colors.green, // background color
-              onPrimary: Colors.white, // text color
-              // thêm minimumSize để kích hoạt padding bên ngoài
-              minimumSize: const Size.fromHeight(48),
-            ),
-            child: isFavourite ? Text("Favourite") : Text("Not favourite"),
-            onPressed: () {
-              widget.movie.isFavourite = !isFavourite;
-              context
-                  .read<MovieDetailBloc>()
-                  .add(MovieDetailFavouriteChanged(widget.movie));
-            },
-          ),
+              TweenSequenceItem(
+                tween: Tween<double>(begin: 2, end: 1),
+                weight: 50,
+              ),
+            ]).animate(animation);
+            return ScaleTransition(
+              scale: animationSize,
+              child: child,
+            );
+          },
+          child: isFavourite
+              ? SizedBox(
+                  width: size.width / 2 - 32,
+                  child: _favouriteIconButton(isFavourite, context),
+                )
+              : SizedBox(
+                  key: UniqueKey(),
+                  width: size.width / 2 - 32,
+                  child: _favouriteIconButton(isFavourite, context),
+                ),
         );
+      },
+    );
+  }
+
+  IconButton _favouriteIconButton(bool isFavourite, BuildContext context) {
+    return IconButton(
+      icon: Icon(
+        Icons.favorite,
+        color: isFavourite ? Colors.red : Colors.grey,
+      ),
+      onPressed: () {
+        widget.movie.isFavourite = !isFavourite;
+        context
+            .read<MovieDetailBloc>()
+            .add(MovieDetailFavouriteChanged(widget.movie));
       },
     );
   }
