@@ -22,7 +22,7 @@ class MovieDatabase {
   Future<Database> _database() async {
     final dbPath = await getDatabasesPath();
     final path = join(dbPath, _dbName);
-    // print(path);
+    print(path);
 
     return await openDatabase(
       path,
@@ -69,6 +69,23 @@ class MovieDatabase {
       _movietableName,
     );
 
+    // print(value);
+    return List.generate(value.length, (index) {
+      return Movie.fromSqlJson(value[index]);
+    });
+  }
+
+  Future<List<Movie>> readFavouriteMovie() async {
+    final db = await _database();
+    final value = await db.query(
+      _movietableName,
+      where: "is_favourite = ?",
+      whereArgs: [1],
+    );
+
+    if (value.isEmpty) {
+      return [];
+    }
     // print(value);
     return List.generate(value.length, (index) {
       return Movie.fromSqlJson(value[index]);

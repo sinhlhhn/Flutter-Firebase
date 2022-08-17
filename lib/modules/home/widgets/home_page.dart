@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:simple_app/Screen/test_screen/tab4.dart';
 import 'package:simple_app/modules/movie/widgets/movie_page.dart';
+import 'package:simple_app/modules/movie_favourite/widgets/movie_favourite_page.dart';
 import 'package:simple_app/modules/profile/widgets/profile_page.dart';
 
 class HomePage extends StatelessWidget {
@@ -14,7 +15,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return DefaultTabController(
-      length: 2,
+      length: 3,
       child: Scaffold(
         bottomNavigationBar: DecoratedBox(
           decoration: BoxDecoration(color: theme.primaryColor),
@@ -29,6 +30,10 @@ class HomePage extends StatelessWidget {
                   text: "Movie",
                 ),
                 Tab(
+                  icon: Icon(Icons.favorite),
+                  text: "Favourite",
+                ),
+                Tab(
                   icon: Icon(Icons.person),
                   text: 'Profile',
                 ),
@@ -41,6 +46,7 @@ class HomePage extends StatelessWidget {
           children: [
             // TestTab(),
             MoviePage(),
+            MovieFavouritePage(),
             ProfilePage(),
           ],
         ),

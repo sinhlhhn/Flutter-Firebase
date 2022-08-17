@@ -10,3 +10,7 @@ abstract class MovieEvent extends Equatable {
 class FetchDataEvent extends MovieEvent {
   const FetchDataEvent();
 }
+
+class FetchFavouriteMovieEvent extends MovieEvent {
+  const FetchFavouriteMovieEvent();
+}

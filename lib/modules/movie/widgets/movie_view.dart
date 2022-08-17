@@ -35,6 +35,13 @@ class _MovieViewState extends State<MovieView> {
   }
 
   @override
+  void dispose() {
+    // _backgroundController.dispose();
+    // _movieController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     context.read<MovieBloc>().add(const FetchDataEvent());
     return BlocBuilder<MovieBloc, MovieState>(
@@ -199,6 +206,7 @@ class _MovieViewState extends State<MovieView> {
   }
 
   void _toDetailMovie(Movie movie) {
-    Navigator.of(context).push(MoviewDetailPage.route(movie));
+    final movieBloc = context.read<MovieBloc>();
+    Navigator.of(context).push(MoviewDetailPage.route(movie, movieBloc));
   }
 }

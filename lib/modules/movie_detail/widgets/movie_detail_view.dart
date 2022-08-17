@@ -1,3 +1,4 @@
+import 'package:simple_app/modules/movie/bloc/movie_bloc.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -73,6 +74,7 @@ class _MovieDetailViewState extends State<MovieDetailView>
     return BlocConsumer<MovieDetailBloc, MovieDetailState>(
       listener: (context, state) {
         if (state is MovieDetailPopupFavouriteStatus) {
+          context.read<MovieBloc>().add(const FetchFavouriteMovieEvent());
           final isFavourite = state.isFavourite;
           showTopSnackBar(
             context,
@@ -110,19 +112,19 @@ class _MovieDetailViewState extends State<MovieDetailView>
           child: isFavourite
               ? SizedBox(
                   width: size.width / 2 - 32,
-                  child: _favouriteIconButton(isFavourite, context),
+                  child: _favouriteIconButton(isFavourite),
                 )
               : SizedBox(
                   key: UniqueKey(),
                   width: size.width / 2 - 32,
-                  child: _favouriteIconButton(isFavourite, context),
+                  child: _favouriteIconButton(isFavourite),
                 ),
         );
       },
     );
   }
 
-  IconButton _favouriteIconButton(bool isFavourite, BuildContext context) {
+  IconButton _favouriteIconButton(bool isFavourite) {
     return IconButton(
       icon: Icon(
         Icons.favorite,

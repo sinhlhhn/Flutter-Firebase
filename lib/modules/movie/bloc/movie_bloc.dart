@@ -13,6 +13,7 @@ class MovieBloc extends Bloc<MovieEvent, MovieState> {
       : _movieRepository = movieRepository,
         super(const MovieState()) {
     on<FetchDataEvent>(_onFetchData);
+    on<FetchFavouriteMovieEvent>(_onFetchFavouriteMovie);
   }
 
   Future<void> _onFetchData(
@@ -20,6 +21,17 @@ class MovieBloc extends Bloc<MovieEvent, MovieState> {
     emit(const MovieState.loading("Loading"));
     try {
       final results = await _movieRepository.fetchMovie();
+      emit(MovieState.completed(results));
+    } catch (e) {
+      emit(MovieState.error(e.toString()));
+    }
+  }
+
+  Future<void> _onFetchFavouriteMovie(
+      FetchFavouriteMovieEvent event, Emitter<MovieState> emit) async {
+    emit(const MovieState.loading("Loading"));
+    try {
+      final results = await _movieRepository.fetchFavouriteMovie();
       emit(MovieState.completed(results));
     } catch (e) {
       emit(MovieState.error(e.toString()));
